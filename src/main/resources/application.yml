@@ -1,0 +1,31 @@
+spring:
+  # 数据库配置
+  datasource:
+    url: jdbc:h2:mem:spring_security_demo_db
+    driver-class-name: org.h2.Driver
+    username: root
+    password: 123456
+    initializationMode: ALWAYS
+    schema: classpath:schema.sql
+    data:
+      - classpath:data.sql
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+  jpa:
+    hibernate:
+      # 使用内嵌数据库（h2db的内存模式）时，默认值为create，create模式报错，所以手动设置为none
+      ddl-auto: none
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+
+logging:
+  file:
+    name: logs/app.log
+  level:
+    org.springframework.security: debug
+server:
+  port: 8080

@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.haruhi.security.security.WebSecurityConfig,\
+  com.haruhi.security.security.CustomAuthenticationManager,\
+  com.haruhi.security.security.SessionOnRedisDAO
