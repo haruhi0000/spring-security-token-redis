@@ -21,8 +21,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     SessionOnRedisDAO sessionOnRedisDAO;
-    @Autowired
-    CustomAuthenticationManager customAuthenticationManager;
+    //@Autowired
+    //CustomAuthenticationManager customAuthenticationManager;
 
     /**
      * 不要用bean的方式创建 CustomAuthenticationFilter，
@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .csrf().disable()
                 .headers().frameOptions().sameOrigin().and()
-                .addFilterAfter(new CustomAuthenticationFilter(sessionOnRedisDAO, customAuthenticationManager), ExceptionTranslationFilter.class)
+                .addFilterAfter(new CustomAuthenticationFilter(sessionOnRedisDAO, new CustomAuthenticationManager()), ExceptionTranslationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
                 .exceptionHandling()

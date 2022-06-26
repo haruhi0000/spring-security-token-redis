@@ -14,10 +14,8 @@ import org.springframework.stereotype.Component;
  *
  * 如果实现AuthenticationManager，AuthenticationProvider或UserDetailsService中的一个，
  * UserDetailsServiceAutoConfiguration就会被禁用。
- * 该类需要加上@Component注解才会有效。
  * @author 61711
  */
-@Component
 public class CustomAuthenticationManager implements AuthenticationManager {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
