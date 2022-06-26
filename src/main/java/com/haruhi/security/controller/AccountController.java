@@ -1,5 +1,6 @@
 package com.haruhi.security.controller;
 
+import com.haruhi.security.dto.AccountDto;
 import com.haruhi.security.entity.Account;
 import com.haruhi.security.entity.AccountInfo;
 import com.haruhi.security.web.ApiResult;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author 61711
@@ -46,15 +49,15 @@ public class AccountController {
         logger.info("logout");
         return ApiResult.success();
     }
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/api/account")
+    @PostMapping("/api/account/create")
     public ApiResult<?> newAccount(@RequestParam("name") String name,
                                 @RequestParam("password") String password,
-                                @RequestParam("roleId") Long roleId) {
-        Account account = new Account();
-        account.setName(name);
-        account.setPassword(password);
-        accountService.create(account);
+                                @RequestParam("roleIds") Set<Long> roleIds) {
+        AccountDto accountDto = new AccountDto();
+        accountDto.setName(name);
+        accountDto.setPassword(password);
+        accountDto.setRoleIds(roleIds);
+        accountService.create(accountDto);
         logger.info("created account");
         return ApiResult.success();
     }

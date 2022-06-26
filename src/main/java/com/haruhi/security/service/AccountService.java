@@ -1,5 +1,6 @@
 package com.haruhi.security.service;
 
+import com.haruhi.security.dto.AccountDto;
 import com.haruhi.security.exception.AccountException;
 import com.haruhi.security.security.SessionOnRedisDAO;
 import com.haruhi.security.entity.Account;
@@ -11,11 +12,12 @@ import com.haruhi.security.repository.AccountRoleRepository;
 import com.haruhi.security.repository.RoleRepository;
 import com.haruhi.security.vo.AccountVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
@@ -73,9 +75,20 @@ public class AccountService {
         sessionOnRedisDAO.remove(accountInfo.getToken());
     }
 
-    public void create(Account account) {
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
+    @Transactional(rollbackFor = Exception.class)
+    public void create(AccountDto accountDto) {
+        Account account = new Account();
+        account.setName(accountDto.getName());
+        account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         accountRepository.save(account);
+        Set<AccountRole> accountRoles = new HashSet<>(accountDto.getRoleIds().size(), 1);
+        for (Long roleId : accountDto.getRoleIds()) {
+            AccountRole accountRole = new AccountRole();
+            accountRole.setAccountId(account.getId());
+            accountRole.setRoleId(roleId);
+            accountRoles.add(accountRole);
+        }
+        accountRoleRepository.saveAll(accountRoles);
     }
     public Account getByName(String name) {
         return accountRepository.getByName(name);

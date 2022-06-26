@@ -1,6 +1,7 @@
 package com.haruhi.security.entity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * @author 61711
@@ -51,11 +52,20 @@ public class AccountRole {
 
         AccountRole that = (AccountRole) o;
 
-        return id.equals(that.id);
+        if (!Objects.equals(id, that.id)) {
+            return false;
+        }
+        if (!Objects.equals(accountId, that.accountId)) {
+            return false;
+        }
+        return Objects.equals(roleId, that.roleId);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (accountId != null ? accountId.hashCode() : 0);
+        result = 31 * result + (roleId != null ? roleId.hashCode() : 0);
+        return result;
     }
 }
