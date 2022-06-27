@@ -2,7 +2,8 @@ package com.haruhi.security.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.haruhi.security.entity.AccountInfo;
+import com.haruhi.security.dto.AccountDto;
+
 import com.haruhi.security.exception.AccountSessionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,20 +20,20 @@ public class SessionOnRedisDAO {
     @Autowired
     RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    public void save(AccountInfo accountInfo) {
+    public void save(AccountDto accountDto) {
         try {
-            String json = objectMapper.writeValueAsString(accountInfo);
-            redisTemplate.opsForValue().set(accountInfo.getToken(), json, 6000, TimeUnit.SECONDS);
+            String json = objectMapper.writeValueAsString(accountDto);
+            redisTemplate.opsForValue().set(accountDto.getToken(), json, 6000, TimeUnit.SECONDS);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
-    public AccountInfo get(String token) throws AccountSessionNotFoundException {
+    public AccountDto get(String token) throws AccountSessionNotFoundException {
         String json = redisTemplate.opsForValue().get(token);
         try {
             if (json != null) {
                 redisTemplate.opsForValue().set(token, json, 6000, TimeUnit.SECONDS);
-                return objectMapper.readValue(json, AccountInfo.class);
+                return objectMapper.readValue(json, AccountDto.class);
             } else {
                 throw new AccountSessionNotFoundException("会话null");
             }

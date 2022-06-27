@@ -1,5 +1,6 @@
 package com.haruhi.security.security;
 
+import com.haruhi.security.dto.AccountDto;
 import com.haruhi.security.entity.AccountInfo;
 import com.haruhi.security.exception.AccountSessionNotFoundException;
 import org.slf4j.Logger;
@@ -11,12 +12,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +36,7 @@ import java.util.Set;
  * @author 61711
  */
 
-public class CustomAuthenticationFilter extends GenericFilterBean {
+public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private final Logger logger = LoggerFactory.getLogger(CustomAuthenticationFilter.class);
 
     private final SessionOnRedisDAO sessionOnRedisDAO;
@@ -44,29 +47,29 @@ public class CustomAuthenticationFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         logger.info("CustomAuthenticationFilter");
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String token = httpServletRequest.getHeader("token");
+        String token = request.getHeader("token");
 
         if (token == null) {
             throw new BadCredentialsException("没有token");
         }
-        AccountInfo accountInfo;
+        AccountDto accountDto;
         try {
-             accountInfo = sessionOnRedisDAO.get(token);
+            accountDto = sessionOnRedisDAO.get(token);
         } catch (AccountSessionNotFoundException e) {
             throw new BadCredentialsException(e.getMessage());
         }
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (String roleName : accountInfo.getRoleNames()) {
+        for (String roleName : accountDto.getRoleNames()) {
             grantedAuthorities.add(new SimpleGrantedAuthority(roleName));
         }
 
-        Authentication customAuthentication = new CustomAuthentication(accountInfo, token, grantedAuthorities);
+        Authentication customAuthentication = new CustomAuthentication(accountDto, token, grantedAuthorities);
         customAuthentication = authenticationManager.authenticate(customAuthentication);
         SecurityContextHolder.getContext().setAuthentication(customAuthentication);
-        httpServletRequest.getSession().setAttribute("accountInfo", accountInfo);
-        chain.doFilter(request, response);
+        request.getSession().setAttribute("account", accountDto);
+        filterChain.doFilter(request, response);
     }
+
 }

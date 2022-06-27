@@ -44,8 +44,8 @@ public class AccountController {
         return ApiResult.success(accountVo);
     }
     @PutMapping("/api/logout")
-    public ApiResult<?> logout(@ApiIgnore @SessionAttribute("accountInfo") AccountInfo accountInfo) {
-        accountService.logout(accountInfo);
+    public ApiResult<?> logout(@ApiIgnore @SessionAttribute("account") AccountDto accountDto) {
+        accountService.logout(accountDto);
         logger.info("logout");
         return ApiResult.success();
     }

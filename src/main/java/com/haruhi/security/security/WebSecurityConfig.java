@@ -3,6 +3,9 @@ package com.haruhi.security.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -10,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 
 /**
  * 配置Spring Security
@@ -36,10 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.cors().and()
                 .csrf().disable()
-                .headers().frameOptions().sameOrigin().and()
+                .headers().frameOptions().sameOrigin()
+                .and()
+                .authorizeRequests().anyRequest().authenticated()
+                .and()
                 .addFilterAfter(new CustomAuthenticationFilter(sessionOnRedisDAO, new CustomAuthenticationManager()), ExceptionTranslationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and()
@@ -62,6 +68,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-resources/**",
                 "/v2/**",
                 "/h2-console/**",
-                "/error");
+                "/error").antMatchers(HttpMethod.GET, "/api/test/ignore");
     }
 }

@@ -9,8 +9,17 @@ public class AccountDto {
     private Long id;
     private String name;
     private String password;
+    private String token;
     private Set<String> roleNames;
     private Set<Long> roleIds;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getPassword() {
         return password;

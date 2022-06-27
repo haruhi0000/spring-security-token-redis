@@ -59,20 +59,20 @@ public class AccountService {
             String token = UUID.randomUUID().toString();
             accountVo.setToken(token);
             accountVo.setRoleNames(roleNames);
-            AccountInfo accountInfo = new AccountInfo();
-            accountInfo.setId(account.getId());
-            accountInfo.setName(account.getName());
-            accountInfo.setToken(token);
-            accountInfo.setRoleNames(roleNames);
-            sessionOnRedisDAO.save(accountInfo);
+            AccountDto accountDto = new AccountDto();
+            accountDto.setId(account.getId());
+            accountDto.setName(account.getName());
+            accountDto.setToken(token);
+            accountDto.setRoleNames(roleNames);
+            sessionOnRedisDAO.save(accountDto);
             return accountVo;
         } else {
             throw new AccountException("密码错误");
         }
     }
 
-    public void logout(AccountInfo accountInfo) {
-        sessionOnRedisDAO.remove(accountInfo.getToken());
+    public void logout(AccountDto accountDto) {
+        sessionOnRedisDAO.remove(accountDto.getToken());
     }
 
     @Transactional(rollbackFor = Exception.class)
