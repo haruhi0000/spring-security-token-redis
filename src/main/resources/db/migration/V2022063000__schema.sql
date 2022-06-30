@@ -42,3 +42,6 @@ CREATE TABLE IF NOT EXISTS `group_role` (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE group_role (
+
+);

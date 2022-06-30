@@ -6,14 +6,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
+/**
+ * @author 61711
+ */
 @Entity
-public class Role {
+public class AccountGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private Long groupId;
+    private Long accountId;
     private Date createdTime;
     private Date updatedTime;
+
     public Long getId() {
         return id;
     }
@@ -22,12 +27,20 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Date getCreatedTime() {

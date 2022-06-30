@@ -6,14 +6,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
+/**
+ * @author 61711
+ */
 @Entity
-public class Role {
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private Date createdTime;
     private Date updatedTime;
+
     public Long getId() {
         return id;
     }

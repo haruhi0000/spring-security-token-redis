@@ -1,19 +1,21 @@
 package com.haruhi.security.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * @author 61711
+ */
 @Entity
-public class Role {
+public class GroupRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private Long groupId;
+    private Long roleId;
     private Date createdTime;
     private Date updatedTime;
+
     public Long getId() {
         return id;
     }
@@ -22,12 +24,20 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Long getGroupId() {
+        return groupId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     public Date getCreatedTime() {
