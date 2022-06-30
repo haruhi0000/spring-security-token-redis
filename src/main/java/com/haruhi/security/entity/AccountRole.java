@@ -7,11 +7,11 @@ import java.util.Date;
  * @author 61711
  */
 @Entity
-public class GroupRole {
+public class AccountRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long groupId;
+    private Long accountId;
     private Long roleId;
     private Date createdTime;
     private Date updatedTime;
@@ -24,12 +24,12 @@ public class GroupRole {
         this.id = id;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Long getRoleId() {

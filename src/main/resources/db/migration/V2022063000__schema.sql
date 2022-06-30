@@ -16,16 +16,16 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS `account_group` (
+CREATE TABLE IF NOT EXISTS `account_team` (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   account_id bigint(20) NOT NULL,
-  group_id bigint(20) NOT NULL,
+  team_id bigint(20) NOT NULL,
   created_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   updated_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS `group` (
+CREATE TABLE IF NOT EXISTS `team` (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   name varchar(100) NOT NULL DEFAULT '无',
   created_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -33,15 +33,11 @@ CREATE TABLE IF NOT EXISTS `group` (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS `group_role` (
+CREATE TABLE IF NOT EXISTS `account_role` (
   id bigint(20) NOT NULL AUTO_INCREMENT,
-  group_id bigint(20) NOT NULL,
+  account_id bigint(20) NOT NULL,
   role_id bigint(20) NOT NULL,
   created_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   updated_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
   PRIMARY KEY (id)
-);
-
-CREATE TABLE group_role (
-
 );

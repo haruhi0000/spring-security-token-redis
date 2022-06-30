@@ -1,5 +1,8 @@
 package com.haruhi.security.dto;
 
+import com.haruhi.security.entity.Team;
+import com.haruhi.security.entity.Role;
+
 import java.util.Set;
 
 /**
@@ -11,23 +14,8 @@ public class AccountDto {
     private String password;
     private String token;
     private Set<String> roleNames;
-    private Set<Long> roleIds;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private Set<Team> teams;
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -45,6 +33,21 @@ public class AccountDto {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public Set<String> getRoleNames() {
         return roleNames;
@@ -54,11 +57,19 @@ public class AccountDto {
         this.roleNames = roleNames;
     }
 
-    public Set<Long> getRoleIds() {
-        return roleIds;
+    public Set<Team> getTeams() {
+        return teams;
     }
 
-    public void setRoleIds(Set<Long> roleIds) {
-        this.roleIds = roleIds;
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

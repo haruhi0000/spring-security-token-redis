@@ -1,15 +1,9 @@
 package com.haruhi.security.service;
 
 import com.haruhi.security.dto.AccountDto;
-import com.haruhi.security.entity.Account;
-import com.haruhi.security.entity.AccountGroup;
-import com.haruhi.security.entity.GroupRole;
-import com.haruhi.security.entity.Role;
+import com.haruhi.security.entity.*;
 import com.haruhi.security.exception.AccountException;
-import com.haruhi.security.repository.AccountGroupRepository;
-import com.haruhi.security.repository.AccountRepository;
-import com.haruhi.security.repository.GroupRoleRepository;
-import com.haruhi.security.repository.RoleRepository;
+import com.haruhi.security.repository.*;
 import com.haruhi.security.security.SessionOnRedisDAO;
 import com.haruhi.security.vo.AccountVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author 61711
@@ -35,29 +25,36 @@ public class AccountService {
     @Autowired
     RoleRepository roleRepository;
     @Autowired
-    AccountGroupRepository accountGroupRepository;
+    AccountTeamRepository accountTeamRepository;
     @Autowired
-    GroupRoleRepository groupRoleRepository;
+    AccountRoleRepository accountRoleRepository;
+    @Autowired
+    TeamRepository teamRepository;
     @Autowired
     SessionOnRedisDAO sessionOnRedisDAO;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public AccountVo login(String name, String password, HttpServletRequest httpServletRequest) throws AccountException {
+    public AccountVo login(String name, String password) throws AccountException {
         Account account = accountRepository.getByName(name);
         if (account == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
         Set<String> roleNames = new HashSet<>();
         if (passwordEncoder.matches(password, account.getPassword())) {
-            List<AccountGroup> accountGroups = accountGroupRepository.findByAccountId(account.getId());
-            for (AccountGroup accountGroup : accountGroups) {
-                List<GroupRole> groupRoles = groupRoleRepository.findByGroupId(accountGroup.getGroupId());
-                for (GroupRole groupRole : groupRoles) {
-                    Role role = roleRepository.getById(groupRole.getRoleId());
-                    if (role != null) {
-                        roleNames.add(role.getName());
-                    }
-                }
+            List<AccountTeam> accountTeams = accountTeamRepository.findByAccountId(account.getId());
+            Set<Team> teams = new HashSet<>();
+            for (AccountTeam accountTeam : accountTeams) {
+                Optional<Team> optionalGroup = teamRepository.findById(accountTeam.getTeamId());
+                optionalGroup.ifPresent(teams::add);
+            }
+            List<AccountRole> accountRoles = accountRoleRepository.findByAccountId(account.getId());
+            Set<Role> roles = new HashSet<>();
+            for (AccountRole accountRole : accountRoles) {
+                Optional<Role> optionalRole = roleRepository.findById(accountRole.getRoleId());
+                optionalRole.ifPresent(role -> {
+                    roles.add(role);
+                    roleNames.add(role.getName());
+                });
             }
             AccountVo accountVo = new AccountVo();
             accountVo.setId(account.getId());
@@ -70,6 +67,8 @@ public class AccountService {
             accountDto.setName(account.getName());
             accountDto.setToken(token);
             accountDto.setRoleNames(roleNames);
+            accountDto.setRoles(roles);
+            accountDto.setGroups(teams);
             sessionOnRedisDAO.save(accountDto);
             return accountVo;
         } else {
@@ -88,7 +87,13 @@ public class AccountService {
         account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         accountRepository.save(account);
     }
+
     public Account getByName(String name) {
         return accountRepository.getByName(name);
+    }
+
+    public List<AccountVo> list(AccountDto accountDto) {
+
+        return null;
     }
 }

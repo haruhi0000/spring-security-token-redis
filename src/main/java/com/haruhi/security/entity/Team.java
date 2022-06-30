@@ -5,17 +5,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author 61711
  */
 @Entity
-public class AccountGroup {
+public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long groupId;
-    private Long accountId;
+    private String name;
     private Date createdTime;
     private Date updatedTime;
 
@@ -27,20 +27,12 @@ public class AccountGroup {
         this.id = id;
     }
 
-    public Long getGroupId() {
-        return groupId;
+    public String getName() {
+        return name;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getCreatedTime() {
@@ -57,5 +49,24 @@ public class AccountGroup {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Team team = (Team) o;
+
+        return Objects.equals(id, team.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

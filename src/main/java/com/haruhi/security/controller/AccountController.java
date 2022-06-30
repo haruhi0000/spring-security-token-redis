@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,11 +28,10 @@ public class AccountController {
     }
     @PostMapping("/api/login")
     public ApiResult<AccountVo> login(@RequestParam("name") String name,
-                                   @RequestParam("password") String password,
-                                   @ApiIgnore HttpServletRequest httpServletRequest) {
+                                      @RequestParam("password") String password) {
         AccountVo accountVo;
         try {
-            accountVo = accountService.login(name, password, httpServletRequest);
+            accountVo = accountService.login(name, password);
             logger.info("login");
         } catch (AccountException e) {
             return ApiResult.failed(e.getMessage());
@@ -58,8 +57,8 @@ public class AccountController {
         return ApiResult.success();
     }
     @GetMapping("/api/account/list")
-    public ApiResult<?> list() {
-
+    public ApiResult<?> list(@ApiIgnore @SessionAttribute("account") AccountDto accountDto) {
+        List<AccountVo> accountVos = accountService.list(accountDto);
         return ApiResult.success();
     }
 }

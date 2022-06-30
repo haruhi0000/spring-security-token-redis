@@ -10,11 +10,12 @@ import java.util.Date;
  * @author 61711
  */
 @Entity
-public class Group {
+public class AccountTeam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private Long teamId;
+    private Long accountId;
     private Date createdTime;
     private Date updatedTime;
 
@@ -26,12 +27,20 @@ public class Group {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Long getTeamId() {
+        return teamId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Date getCreatedTime() {
