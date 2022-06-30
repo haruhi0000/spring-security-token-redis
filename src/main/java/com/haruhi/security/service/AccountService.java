@@ -1,21 +1,19 @@
 package com.haruhi.security.service;
 
 import com.haruhi.security.dto.AccountDto;
-import com.haruhi.security.exception.AccountException;
-import com.haruhi.security.security.SessionOnRedisDAO;
 import com.haruhi.security.entity.Account;
-import com.haruhi.security.entity.AccountInfo;
 import com.haruhi.security.entity.AccountRole;
 import com.haruhi.security.entity.Role;
+import com.haruhi.security.exception.AccountException;
 import com.haruhi.security.repository.AccountRepository;
 import com.haruhi.security.repository.AccountRoleRepository;
 import com.haruhi.security.repository.RoleRepository;
+import com.haruhi.security.security.SessionOnRedisDAO;
 import com.haruhi.security.vo.AccountVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

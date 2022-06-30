@@ -1,21 +1,17 @@
 package com.haruhi.security.controller;
 
 import com.haruhi.security.dto.AccountDto;
-import com.haruhi.security.entity.Account;
-import com.haruhi.security.entity.AccountInfo;
-import com.haruhi.security.web.ApiResult;
 import com.haruhi.security.exception.AccountException;
 import com.haruhi.security.service.AccountService;
 import com.haruhi.security.vo.AccountVo;
+import com.haruhi.security.web.ApiResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Set;
 
 /**
