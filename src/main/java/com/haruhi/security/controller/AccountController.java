@@ -57,4 +57,9 @@ public class AccountController {
         logger.info("created account");
         return ApiResult.success();
     }
+    @GetMapping("/api/account/list")
+    public ApiResult<?> list() {
+
+        return ApiResult.success();
+    }
 }
