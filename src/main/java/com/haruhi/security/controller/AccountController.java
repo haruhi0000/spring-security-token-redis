@@ -51,7 +51,6 @@ public class AccountController {
         AccountDto accountDto = new AccountDto();
         accountDto.setName(name);
         accountDto.setPassword(password);
-        accountDto.setRoleIds(roleIds);
         accountService.create(accountDto);
         logger.info("created account");
         return ApiResult.success();

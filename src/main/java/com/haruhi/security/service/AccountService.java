@@ -68,7 +68,7 @@ public class AccountService {
             accountDto.setToken(token);
             accountDto.setRoleNames(roleNames);
             accountDto.setRoles(roles);
-            accountDto.setGroups(teams);
+            accountDto.setTeams(teams);
             sessionOnRedisDAO.save(accountDto);
             return accountVo;
         } else {
